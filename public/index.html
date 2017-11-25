@@ -1,44 +1,373 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <base href="/">
-  <title>Conversation Chat App</title>
+  <!-- Theme Made By www.w3schools.com - No Copyright -->
+  <title>unwind</title>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta property="og:image" content="conversation.svg" />
-  <meta property="og:title" content="Conversation Chat Simple" />
-  <meta property="og:description" content="Sample application that shows how to use the Conversation API to identify user intents" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="css/app.css">
-</head>
-<body>
-  <div id="view-change-button" class="button" onclick="PayloadPanel.togglePanel(event, this)">
-    <img class="option full" src="../img/Chat Button.png">
-    <img class="option not-full" src="../img/Code Button.png">
-  </div>
-  <div id="contentParent" class="responsive-columns-wrapper">
-    <div id="chat-column-holder" class="responsive-column content-column">
-      <div class="chat-column">
-        <div id="scrollingChat"></div>
-        <label for="textInput" class="inputOutline">
-          <input id="textInput" class="input responsive-column"
-            placeholder="Type something" type="text"
-            onkeydown="ConversationPanel.inputKeyDown(event, this)">
-        </label>
-      </div>
-    </div>
-    <div id="payload-column" class="fixed-column content-column">
-      <div id="payload-initial-message">
-        Type something to see the output
-      </div>
-      <div id="payload-request" class="payload"></div>
-      <div id="payload-response" class="payload"></div>
-    </div>
-  </div>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+  body {
+      font: 400 15px Helvetica;
+      line-height: 1.8;font-weight:200;
+      color: Black;
+  }
+  h2 {
+      font-size: 28px;
+      text-transform: lowercase;
+      color: #10559D;
+      font-weight: 250;
+      margin-bottom: 10px;
+  }
+  h4 {
+      font-size: 19px;
+      line-height: 1.375em;
+      color: #1c8367;
+      font-weight: 400;
+      margin-bottom: 30px;
+  }
+  
+  #maintitle { font-family:helvetica; font-weight:200; font-size:85px;
+  color:#fff; text-align:center;padding-top:220px; padding-bottom:250px;}
+  
+  
+  
+  .jumbotron {
+      background-color: #EEEEEE;
+      color: black;height: 100%;
+      padding: 100px 25px;
+      font-family: Helvetica;
+  }
+  .container-fluid {
+      padding: 60px 50px;
+  }
+  .bg-grey {
+      background-color: #f6f6f6;
+  }
+  .logo-small {
+      color: #f4511e;
+      font-size: 50px;
+  }
+  .logo {
+      color: #f4511e;
+      font-size: 200px;
+  }
+  .thumbnail {
+      padding: 0 0 15px 0;
+      border: none;
+      border-radius: 0;
+  }
+  .thumbnail img {
+      width: 100%;
+      height: 100%;
+      margin-bottom: 10px;
+  }
+  .carousel-control.right, .carousel-control.left {
+      background-image: none;
+      color: #1c8367;
+  }
+  .carousel-indicators li {
+      border-color: #1c8367;
+  }
+  .carousel-indicators li.active {
+      background-color: #1c8367;
+  }
+  .item h4 {
+      font-size: 19px;
+      line-height: 1.375em;
+      font-weight: 400;
+      font-style: italic;
+      margin: 70px 0;
+  }
+  .item span {
+      font-style: normal;
+  }
+  .panel {
+      border: 1px solid #f4511e;
+      border-radius:0 !important;
+      transition: box-shadow 0.5s;
+  }
+  .panel:hover {
+      box-shadow: 5px 0px 40px rgba(0,0,0, .2);
+  }
+  .panel-footer .btn:hover {
+      border: 1px solid #f4511e;
+      background-color: #fff !important;
+      color: #f4511e;
+  }
+  .panel-heading {
+      color: #fff !important;
+      background-color: #f4511e !important;
+      padding: 25px;
+      border-bottom: 1px solid transparent;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+  }
+  .panel-footer {
+      background-color: white !important;
+  }
+  .panel-footer h3 {
+      font-size: 32px;
+  }
+  .panel-footer h4 {
+      color: #aaa;
+      font-size: 14px;
+  }
+  .panel-footer .btn {
+      margin: 15px 0;
+      background-color: #f4511e;
+      color: #fff;
+  }
+  .navbar {
+      margin-bottom: 0;
+      background-color: white;
+      z-index: 9999;
+      border: 0;
+      font-size: 12px !important;
+      line-height: 1.42857143 !important;
+      letter-spacing: 4px;
+      border-radius: 0;
+      font-family: Montserrat, sans-serif;
+  }
+  .navbar li a, .navbar .navbar-brand {
+      color: black !important;
+  }
+  .navbar-nav li a:hover, .navbar-nav li.active a {
+      color: white !important;
+      background-color: #008EC3 !important;
+  }
+  .navbar-default .navbar-toggle {
+      border-color: transparent;
+      color: #1c8367 !important;
+  }
+  footer .glyphicon {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #f4511e;
+  }
+  .slideanim {visibility:hidden;}
+  .slide {
+      animation-name: slide;
+      -webkit-animation-name: slide;
+      animation-duration: 1s;
+      -webkit-animation-duration: 1s;
+      visibility: visible;
+  }
+  @keyframes slide {
+    0% {
+      opacity: 0;
+      transform: translateY(70%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+  @-webkit-keyframes slide {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(70%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0%);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .col-sm-4 {
+      text-align: center;
+      margin: 25px 0;
+    }
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 35px;
+    }
+  }
+  @media screen and (max-width: 480px) {
+    .logo {
+        font-size: 150px;
+    }
+  }
 
-  <script src="js/common.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/conversation.js"></script>
-  <script src="js/payload.js"></script>
-  <script src="js/global.js"></script>
+
+  
+  
+  </style>
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#myPage"></a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#about">THE IDEA</a></li>
+        <li><a href="#services">DESIGN</a></li>
+        <li><a href="#portfolio">PRODUCT</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="jumbotron text-center">
+  <div id="maintitle">unwind</div>
+</div>
+
+<!-- Container (About Section) -->
+<div id="about" class="container-fluid text-center">
+      <h2>about unwind</h2>
+      <p>Unwind is a mental wellbeing app. It provides a safe place where<br> 
+      users can relieve their anxieties to a helpful, understanding, non-judgemental ear. </p>
+    <p> At its heart is a chatbot powered by the IBM Watson Conversation API. Unwind<br> recommends coping
+     strategies based on users' concerns. <p
+     >Unlike mindfullness apps, Unwind knows meditation isn’t the answer to everything.</p>
+     <p>Try it out for free. <a href="/home.html">Take your time.</a><p>
+     <img src="../img/breathe2.gif" width="313" height="280.5">
+	
+	</div>
+
+      
+
+
+
+
+<!-- Container (Services Section) -->
+<div id="services" class="container-fluid bg-grey text-center">
+  <h2>Design Process</h2>
+  <div class="row">
+    <div class="col-sm-12">
+		<p> For users to really value Unwind, it needed to speak to them in an understanding<br> 
+		way. To ensure this, the team first created user personas to frame the delivery of Unwind. 
+	</p>
+    </div>
+    <div class="col-sm-12">
+      <p> Everything from sketches, to wireframes, high-fidelity designs, branding and tone <br>
+      of voice were validated against these personas. </p>
+    </div>
+  </div>
+	<div class="col-sm-4">
+      <div class="thumbnail">
+        <img src="../img/drawings.png" alt="Prototype" width="400" height="300">
+
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="thumbnail">
+        <img src="../img/mindmap.png" alt="Plans" width="400" height="300">
+
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="thumbnail">
+	  <img src="../img/drawings2.png" alt="Plans" width="400" height="300">
+      </div> 
+    </div>
+
+   
+  <div class="row">
+  <div class="col-sm-6">
+	<img src="../img/UserPersona1.png" alt="Plans" width="400" height="300">
+  </div>
+  <div class="col-sm-6">
+	<img src="../img/UserPersona2.png" alt="Plans" width="400" height="300">
+  </div>
+  </div>
+</div> 
+  
+<ul>
+<p>
+
+</div>
+	
+  <br>
+  <div class="row slideanim">
+    <div class="col-sm-4">
+      
+ </div>
+    <div class="col-sm-4">
+      
+</div>
+    <div class="col-sm-4">
+    </div>
+  </div>
+  <br><br>
+  <div class="row slideanim">
+    <div class="col-sm-12">
+      
+    </div>
+
+  </div>
+</div>
+
+<!-- Container (Portfolio Section) -->
+<div id="portfolio" class="container-fluid text-center">
+  <h2>The Prototype</h2>
+  <div class="row text-center slideanim">
+  <p> The final prototype followed three user journeys: onboarding,<br> 
+  and two specific use cases. As well as this the final prototype was <br>
+  an opportunity for Unwind to learn about human emotion<br> and relevant responses to user concerns.
+ </p>
+    
+  </div><br>
+
+<footer class="container-fluid text-center">
+  <a href="#myPage" title="To Top">
+    ^
+  </a>
+
+</footer>
+
+<script>
+$(document).ready(function(){
+  // Add smooth scrolling to all links in navbar + footer link
+  $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 900, function(){
+   
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+  
+  $(window).scroll(function() {
+    $(".slideanim").each(function(){
+      var pos = $(this).offset().top;
+
+      var winTop = $(window).scrollTop();
+        if (pos < winTop + 600) {
+          $(this).addClass("slide");
+        }
+    });
+  });
+})
+</script>
+
 </body>
 </html>
+
+
