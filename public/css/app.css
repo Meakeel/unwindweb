@@ -59,7 +59,7 @@ display: none;
 }
 
 .chat-column {
-  height: 100%;
+  height: 500px;
   padding: 0.9375rem 0 0.625rem 0;
   margin: auto;margin-left:0px;margin-top:250px;
   text-align: left;
@@ -67,8 +67,8 @@ display: none;
   min-width: 9.375rem;
 }
 
-#textcolumn { height:200px; margin-top:40px;width:300px; font-family:helvetica;
-font-size:18px; font-weight:200; text-align:center;}
+#textcolumn { height:200px; margin-top:10px;width:300px; font-family:helvetica;
+font-size:18px; font-weight:200; text-align:center;right:50%;}
 
 #scrollingChat {
   margin: 0.75rem;margin-top:100px;
